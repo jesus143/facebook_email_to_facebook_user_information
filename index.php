@@ -1,4 +1,6 @@
-<?php  
+<?php
+    session_start();
+    require_once ('api/random-user-agent-master/src/UserAgent.php');
 	require_once('includes/FacebookEmailConverter.php');  
 	$facebookEmailConverter = new FacebookEmailConverter();
 	$facebookEmailConverter->run(); 
@@ -47,11 +49,29 @@
 
 		<textarea name="email_list" class="form-control" placeholder="Separate emails with comma." style="height:100px"><?php echo $facebookEmailConverter->email_list; ?></textarea>
 		<br>
+
+
+
+
+        <label>Limit Search:</label><br><br>
+        <select class="form-control" name="query_limit">
+
+            <?php
+            foreach($facebookEmailConverter->query_param as $param) {
+                if( $facebookEmailConverter->query_limit == $param)
+                    echo "<option value='$param' selected> " . $param . "  </option>";
+                else
+                    echo "<option value='$param' > " . $param . "  </option>";
+
+            }
+            ?>
+        </select>
+
+        <br>
+
 		<input type="submit" name="submit" value="Submit" class="alert btn-success" />
-	</form> 
-
-	<br> 
-
+	</form>
+	<br>
  	<div class="panel panel-default"> 
 	    <div class="panel-body">
 			<table id="facebook-profile-table" class="display" cellspacing="0" width="100%">
@@ -70,39 +90,52 @@
 		            </tr>
 		        </tfoot>
 		        <tbody>
-		        	<?php if(!empty($facebookEmailConverter->response)) {  ?>
-						<?php foreach($facebookEmailConverter->response as $res) {   ?>  
+		        	<?php if(!empty($facebookEmailConverter->response)) {
+		        	    $counter = 0;
+
+
+//		        	    print_r($facebookEmailConverter->response);
+						 foreach($facebookEmailConverter->response as $res) {
+
+                                $facebookUserId = $facebookEmailConverter->getFacebookIdByFacebookUsername($res['facebook_username']);
+                                ?>
 					        <tr>
 				                <td>
 									<div class="media">
 									  <div class="media-left">
-									    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCCGlccq7qjZJaibDqlJuEU-F1Uk6THclbNvMHWRblRP88ezEteQ" class="media-object" style="width:60px">
+									    <img src="<?php
+                                        if($res['facebook_username'] == 'not available')
+                                            echo 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCCGlccq7qjZJaibDqlJuEU-F1Uk6THclbNvMHWRblRP88ezEteQ';
+                                        else
+                                            echo $facebookEmailConverter->getFacebookUseProfilePicByFacebookUserId($facebookUserId);
+                                        ?>" class="media-object" style="width:60px">
 									  </div>
 									</div>
 				                </td>
-				                <td> 
+				                <td>
 									<div class="media-body">
-									    <h4 class="media-heading"><?php echo $res['email']; ?></h4> 
-									</div> 
+									    <h4 class="media-heading">
+                                            <?php
+                                                if($res['facebook_username'] == 'not available')
+                                                    echo 'not available';
+                                                else
+                                                    echo $facebookEmailConverter->getFacebookUserFullNameByFacebookUserId($facebookUserId);
+                                            ?>
+                                        </h4>
+                                    </div>
 				                </td>
 				                <td>
-									
-									<?php if($res['facebook_username'] == 'not available') {   ?>
+									<?php if($res['facebook_username'] == 'not available'): ?>
 										<span style="color:red;font-weight: bold">This email address is not in facebook</span>
-									<?php } else { ?>
+									<?php else: ?>
 					                	<a href="https://www.messenger.com/t/<?php echo $res['facebook_username']; ?>" target="_blank">
-											<!-- <button class="fb-messenger-button"></button> -->
-
-											<img src="https://maxcdn.icons8.com/Share/icon/Logos//facebook_messenger1600.png" style="height:51px;" />  
-
-
-										</a> 
-									<?php } ?> 
-				                </td> 
+											<img src="https://maxcdn.icons8.com/Share/icon/Logos//facebook_messenger1600.png" style="height:51px;" />
+										</a>
+									<?php endif; ?>
+				                </td>
 				            </tr>
 				        <?php } ?>
 		            <?php } ?>
-
 		        </tbody>
 		    </table>
 	    </div>   

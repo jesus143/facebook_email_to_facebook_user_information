@@ -1,0 +1,4 @@
+[26-Aug-2017 08:32:37 America/Chicago] PHP Fatal error:  Call to undefined method FacebookEmailConverter::getDisplayUiCSVFiles() in /home3/sylvangr/public_html/suite.social/coder/emails/csv-view.php on line 38
+[26-Aug-2017 08:32:58 America/Chicago] PHP Fatal error:  Class 'FacebookEmailConverter' not found in /home3/sylvangr/public_html/suite.social/coder/emails/csv-view.php on line 4
+[26-Aug-2017 09:48:09 America/Chicago] PHP Fatal error:  Using $this when not in object context in /home3/sylvangr/public_html/suite.social/coder/emails/index.php on line 72
+[26-Aug-2017 10:12:48 America/Chicago] PHP Fatal error:  Class 'FacebookEmailConverter' not found in /home3/sylvangr/public_html/suite.social/coder/emails/index.php on line 4

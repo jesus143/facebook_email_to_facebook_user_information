@@ -16,26 +16,60 @@ class FacebookEmailConverter {
 	 public $email_list;   
 	 public $response;   
 	 public $fullName;   
-	 public $error;   
+	 public $error;
+	 private $facebookAccessToken;
+	 public $query_param = [1,5,10,20,30,40,50,100];
+	 public $query_limit = '';
+
+    function __construct($facebookAccessToken='EAAUgZCUpPcDkBAAFp8gXwcEi5LYFZAezfZCqh9J0lfHxEiwMQa1ZA6XjQI0XZCZCiufkzqc0jb8bi4JvFEWZCZC2LQhFbQHiTrKfmCZBKZAIgAwRibgLlKvSmyIoiBguiV5rZCTwQc36chZA3KYCnBiia92ifi0OqaoZBrbCVlJSR5eGL4gZDZD')
+    {
+        $this->facebookAccessToken = $facebookAccessToken;
+    }
+
+    private function facebook_search($query, $type = 'all') {
 
 
+        $randomNumber = 1;
+//        print "random number $randomNumber";
+//        print $_SERVER['HTTP_USER_AGENT'];
+	    $url = 'http://www.facebook.com/search/'.$type.'/?q='.$query;
+//         $user_agent = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.109 Safari/537.36';
+	    $user_agent = \Campo\UserAgent::random(); //'Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:40.0) Gecko/20100101 Firefox/40.0';
+//        print $user_agent;
+        //
+        // //
+//        $user_agent =  'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.' . $randomNumber . ' Safari/537.36Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.2 Safari/537.36Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.' . $randomNumber . ' Safari/537.36'; //'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.101 Safari/537.36';
 
-	private function facebook_search($query, $type = 'all') {
+//        $agents = array(
+//            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.7; rv:7.0.1) Gecko/20100101 Firefox/7.0.1',
+//            'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.1.9) Gecko/20100508 SeaMonkey/2.0.4',
+//            'Mozilla/5.0 (Windows; U; MSIE 7.0; Windows NT 6.0; en-US)',
+//            'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_7; da-dk) AppleWebKit/533.21.1 (KHTML, like Gecko) Version/5.0.5 Safari/533.21.1'
+//
+//        );
 
-	    $url = 'http://www.facebook.com/search/'.$type.'/?q='.$query; 
-	    $user_agent = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.109 Safari/537.36';
+        $header[0] = "Accept: text/xml,application/xml,application/xhtml+xml,";
+        $header[0] .= "text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5";
+        $header[] = "Cache-Control: max-age=0";
+        $header[] = "Connection: keep-alive";
+        $header[] = "Keep-Alive: 300";
+        $header[] = "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7";
+        $header[] = "Accept-Language: en-us,en;q=0.5";
+        $header[] = "Pragma: ";
 
-	    
 	    $ch = curl_init();
-	    
-	   curl_setopt($ch, CURLOPT_URL, $url);
-	   // curl_setopt($ch, CURLOPT_PROXY, '188.255.12.241:8081');
-	   // curl_setopt($ch, CURLOPT_PROXY, '216.100.88.229:8080');
-	   curl_setopt($ch, CURLOPT_HEADER, FALSE);
-	   curl_setopt($ch, CURLOPT_USERAGENT, $user_agent);
-	   curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-	   curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
-	   curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+
+       curl_setopt($ch, CURLOPT_URL, $url);
+       // curl_setopt($ch, CURLOPT_PROXY, '188.255.12.241:8081');
+       // curl_setopt($ch, CURLOPT_PROXY, '216.100.88.229:8080');
+       // curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
+//       curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
+//       curl_setopt($ch, CURLOPT_HEADER, FALSE);
+        curl_setopt($ch, CURLOPT_USERAGENT, $user_agent);
+//       curl_setopt($ch,CURLOPT_USERAGENT,$agents[array_rand($agents)]);
+       curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+       curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
+       curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
 
 	    // curl_setopt_array($c, array(
 	    //     CURLOPT_URL             => $url, 
@@ -48,32 +82,41 @@ class FacebookEmailConverter {
 	    // ));
  
 	    $data = curl_exec($ch);
-
-	     // echo strip_tags($data);
+        curl_close($ch);
+//	      echo strip_tags($data);
 
 	    // print "<hr>";
 
 
 	    preg_match_all('/href=\"https:\/\/www.facebook.com\/(([^\"\/]+)|people\/([^\"]+\/\d+))[\/]?\"/', $data, $matches);
 
-	    // print_r($matches); 
- 
-    	// print " total results " . count($matches[3]) . '<br>';
+
+//	    print "<pre>";
+//            print "<br> results:";
+//	        print_r($matches);
+//        print "</pre>";
+
+        // print " total results " . count($matches[3]) . '<br>';
     	// print_r($matches[3]);
 
 	    if(count($matches[3]) > 0) { 
 	    	// print " <br> !empty";
 		    if($matches[3][0] != FALSE){                // facebook.com/people/name/id
 
-		    	// print " <br> inside false ";
+		    	 print " <br> inside false ";
 		        $pages = array_map(function($el){
 		            return explode('/', $el)[0];
 		        }, $matches[3]);
 
-		    }    
+		    }
+
+
+
 	    	// print " <br> inside false ";
 	        // facebook.com/name
-	        $pages = $matches[2]; 
+	        $pages = $matches[2];
+
+
  
 	        // print_r($pages); 
     		return array_filter(array_unique($pages));  // Removing duplicates and empty values
@@ -85,31 +128,39 @@ class FacebookEmailConverter {
 
 	}
   
- 	protected function getFacebookSearchResult($email_list)
+ 	protected function getFacebookSearchResult($email_list, $query_limit=1)
  	{  		
  			$data = []; 	 
 		 	$emails = explode(',', $email_list);  
 		 	$counter = 0;
+		 	$counterLimit = 1;
 
-		 	foreach($emails as $email) {  
-				$data[$counter]['email'] = $email; 
-				$userName = $this->facebook_search($email, 'all');
-				
-				if(!empty($userName)) {
-					$data[$counter]['facebook_username']  = $userName[0];
-				} else {
-					$data[$counter]['facebook_username']  = 'not available';
-				}  
- 			
- 				// check if email exist online
-				$status = $this->checkIfEmailExist($email);
-		 		if($status == true) {
-		 			$data[$counter]['is_exist']  = 'email exist';
-		 		} else {
-		 			$data[$counter]['is_exist']  = 'email not exist'; 
-		 		}
-  
-				$counter++;
+		 	foreach($emails as $email) {
+		 	    if($counterLimit <= $query_limit) {
+
+                    $data[$counter]['email'] = $email;
+                    $userName = $this->facebook_search($email, 'all');
+
+                    if (!empty($userName)) {
+                        $data[$counter]['facebook_username'] = $userName[0];
+                    } else {
+                        $data[$counter]['facebook_username'] = 'not available';
+                    }
+
+                    // check if email exist online
+                    $status = $this->checkIfEmailExist($email);
+                    if ($status == true) {
+                        $data[$counter]['is_exist'] = 'email exist';
+                    } else {
+                        $data[$counter]['is_exist'] = 'email not exist';
+                    }
+
+
+                    $counter++;
+                    $counterLimit++;
+                } else {
+		 	        break;
+                }
 			}	 
 
 			return $data;		
@@ -132,37 +183,48 @@ class FacebookEmailConverter {
 	 */
 	
 	public function run()
-	{    
-		$emailList = '';
-		$response = '';
-		$fullName = '';
+	{
 
-		if(isset($_POST['submit'])) {    			
 
-			$emailList = (!empty($_POST['email_list']) ? $_POST['email_list'] : null);
-			$fullName  = (!empty($_POST['full_name']) ? $_POST['full_name'] : null);
-			 
-			if(empty($fullName)) {
-				$this->error .= 'Please provide your full name.';
-			} 
+	    if(true) {
+            $emailList = '';
+            $response = '';
+            $fullName = '';
+            $query_limit = '';
 
-			if(empty($emailList)) { 
-				if(!empty($this->error)) {
-					$this->error .= '<br>'; 	
-				}
-				$this->error .= 'Please provide your list of email.'; 
-			}
+            if (isset($_POST['submit'])) {
 
-			// Get username, profile and name from facebook  
-			$response = $this->getFacebookSearchResult($emailList);   
- 
-			// export response to csv and store in public/csv
-			$this->exports_data_to_csv($response, $fullName); 
-		}			 
+                $emailList = (!empty($_POST['email_list']) ? $_POST['email_list'] : null);
+                $fullName = (!empty($_POST['full_name']) ? $_POST['full_name'] : null);
+                $query_limit = (!empty($_POST['query_limit']) ? $_POST['query_limit'] : 1);
 
- 		$this->fullName = $fullName;
- 		$this->response = $response;
- 		$this->email_list = $emailList; 
+                if (empty($fullName)) {
+                    $this->error .= 'Please provide your full name.';
+                }
+
+                if (empty($emailList)) {
+                    if (!empty($this->error)) {
+                        $this->error .= '<br>';
+                    }
+                    $this->error .= 'Please provide your list of email.';
+                }
+
+                if(empty($this->error)) {
+                    // Get username, profile and name from facebook
+                    $response = $this->getFacebookSearchResult($emailList, $query_limit);
+
+                    // export response to csv and store in public/csv
+                    $this->exports_data_to_csv($response, $fullName);
+                }
+            }
+
+            $this->fullName = $fullName;
+            $this->response = $response;
+            $this->email_list = $emailList;
+            $this->query_limit = $query_limit;
+//            $_SESSION['response'] = $this->response;
+
+        }
 	}
 
 
@@ -226,5 +288,72 @@ class FacebookEmailConverter {
 					return false;
 				} 		
 			}
+        }
+
+        public function getFacebookIdByFacebookUsername($facebookUsername)
+        {
+            $ch = curl_init();
+            $curlConfig = array(
+                CURLOPT_USERAGENT => 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.101 Safari/537.36',
+                CURLOPT_URL => "https://findmyfbid.com",
+                CURLOPT_POST => true,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_POSTFIELDS => array(
+                    'url' => 'https://www.facebook.com/' . $facebookUsername
+                )
+            );
+
+            curl_setopt_array($ch, $curlConfig);
+            $c_result = curl_exec($ch);
+
+            $userId = str_replace('{"id":', '', $c_result);
+            $userId = str_replace('}', '', $userId);
+
+            return $userId;
+        }
+
+        public function getFacebookUserFullNameByFacebookUserId($FacebookUserId)
+        {
+            $res = '';
+
+            $ch4 = curl_init();
+            curl_setopt($ch4, CURLOPT_RETURNTRANSFER,1);
+            curl_setopt($ch4, CURLOPT_URL, "https://graph.facebook.com/" . $FacebookUserId . "?access_token=" . $this->facebookAccessToken);
+            curl_setopt($ch4, CURLOPT_SSL_VERIFYPEER, false);
+
+            if(!$result = curl_exec($ch4))
+            {
+                echo curl_error($ch4);
+            } else {
+
+                $res = json_decode($result, true);
+            }
+
+            curl_close($ch4);
+
+            return $res['name'];
+
+        }
+        public function getFacebookUseProfilePicByFacebookUserId($FacebookUserId)
+        {
+             return "//graph.facebook.com/$FacebookUserId/picture";
+        }
+        public function getDisplayUiCSVFiles()
+        {
+            $dir = "public/csv";
+            $actual_link = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+            $url = str_replace('/csv-view.php', '', $actual_link);
+            $counter = 1;
+            if (is_dir($dir)){
+                if ($dh = opendir($dir)){
+                    while (($file = readdir($dh)) !== false){
+                        if($file != '..' and $file != '.') {
+                            echo $counter . ".)  <a href='$url/public/csv/$file'>$file</a><br>";
+                            $counter++;
+                        }
+                    }
+                    closedir($dh);
+                }
+            }
         }
 }

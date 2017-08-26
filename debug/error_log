@@ -1,0 +1,24 @@
+[25-Aug-2017 07:52:02 America/Chicago] PHP Warning:  file_get_contents(http://findmyfbid.com): failed to open stream: HTTP request failed! HTTP/1.1 500 Internal Server Error
+ in /home3/sylvangr/public_html/suite.social/coder/emails/debug/get_user_id_by_username.php on line 46
+[25-Aug-2017 07:52:02 America/Chicago] PHP Warning:  DOMDocument::loadHTML(): Empty string supplied as input in /home3/sylvangr/public_html/suite.social/coder/emails/debug/get_user_id_by_username.php on line 50
+[25-Aug-2017 07:53:10 America/Chicago] PHP Warning:  file_get_contents(http://findmyfbid.com): failed to open stream: HTTP request failed! HTTP/1.1 500 Internal Server Error
+ in /home3/sylvangr/public_html/suite.social/coder/emails/debug/get_user_id_by_username.php on line 46
+[25-Aug-2017 07:53:10 America/Chicago] PHP Warning:  DOMDocument::loadHTML(): Empty string supplied as input in /home3/sylvangr/public_html/suite.social/coder/emails/debug/get_user_id_by_username.php on line 50
+[25-Aug-2017 07:53:16 America/Chicago] PHP Warning:  file_get_contents(http://findmyfbid.com): failed to open stream: HTTP request failed! HTTP/1.1 500 Internal Server Error
+ in /home3/sylvangr/public_html/suite.social/coder/emails/debug/get_user_id_by_username.php on line 46
+[25-Aug-2017 07:53:16 America/Chicago] PHP Warning:  DOMDocument::loadHTML(): Empty string supplied as input in /home3/sylvangr/public_html/suite.social/coder/emails/debug/get_user_id_by_username.php on line 50
+[25-Aug-2017 07:53:19 America/Chicago] PHP Warning:  file_get_contents(http://findmyfbid.com): failed to open stream: HTTP request failed! HTTP/1.1 500 Internal Server Error
+ in /home3/sylvangr/public_html/suite.social/coder/emails/debug/get_user_id_by_username.php on line 46
+[25-Aug-2017 07:53:19 America/Chicago] PHP Warning:  DOMDocument::loadHTML(): Empty string supplied as input in /home3/sylvangr/public_html/suite.social/coder/emails/debug/get_user_id_by_username.php on line 50
+[25-Aug-2017 07:55:46 America/Chicago] PHP Warning:  file_get_contents(http://findmyfbid.com): failed to open stream: HTTP request failed! HTTP/1.1 500 Internal Server Error
+ in /home3/sylvangr/public_html/suite.social/coder/emails/debug/get_user_id_by_username.php on line 46
+[25-Aug-2017 07:55:46 America/Chicago] PHP Warning:  DOMDocument::loadHTML(): Empty string supplied as input in /home3/sylvangr/public_html/suite.social/coder/emails/debug/get_user_id_by_username.php on line 50
+[25-Aug-2017 07:57:47 America/Chicago] PHP Warning:  file_get_contents(http://findmyfbid.com): failed to open stream: HTTP request failed! HTTP/1.1 500 Internal Server Error
+ in /home3/sylvangr/public_html/suite.social/coder/emails/debug/get_user_id_by_username.php on line 46
+[25-Aug-2017 07:57:47 America/Chicago] PHP Warning:  DOMDocument::loadHTML(): Empty string supplied as input in /home3/sylvangr/public_html/suite.social/coder/emails/debug/get_user_id_by_username.php on line 50
+[25-Aug-2017 08:01:03 America/Chicago] PHP Warning:  file_get_contents(https://findmyfbid.com): failed to open stream: HTTP request failed! HTTP/1.1 500 Internal Server Error
+ in /home3/sylvangr/public_html/suite.social/coder/emails/debug/get_user_id_by_username.php on line 54
+[25-Aug-2017 08:01:03 America/Chicago] PHP Warning:  DOMDocument::loadHTML(): Empty string supplied as input in /home3/sylvangr/public_html/suite.social/coder/emails/debug/get_user_id_by_username.php on line 58
+[25-Aug-2017 08:01:42 America/Chicago] PHP Warning:  file_get_contents(https://findmyfbid.com): failed to open stream: HTTP request failed! HTTP/1.1 500 Internal Server Error
+ in /home3/sylvangr/public_html/suite.social/coder/emails/debug/get_user_id_by_username.php on line 54
+[25-Aug-2017 08:01:42 America/Chicago] PHP Warning:  DOMDocument::loadHTML(): Empty string supplied as input in /home3/sylvangr/public_html/suite.social/coder/emails/debug/get_user_id_by_username.php on line 58
