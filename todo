@@ -1,0 +1,22 @@
+username wont work in graph anymore
+http://graph.facebook.com/sarfraz.anees/picture 
+http://graph.facebook.com/v2.2/4/picture?redirect=0
+https://www.screencast.com/t/8Mt07kvXilRl
+//graph.facebook.com/{{fid}}/picture
+//graph.facebook.com/{{fid}}/picture?type=large
+
+$img = file_get_contents('https://graph.facebook.com/'.$fid.'/picture?type=large');
+$file = dirname(__file__).'/avatar/'.$fid.'.jpg';
+file_put_contents($file, $img);
+
+
+
+https://www.screencast.com/t/XCeMgcEy9Ku
+
+
+query user information via username is not possible now in facebook 
+https://www.screencast.com/t/aGkoyEof
+
+
+
+
